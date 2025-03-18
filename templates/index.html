@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #sentences {
+	  overflow-y: scroll;
+      }
+      .sentence {
+	  margin: 10px;
+      }
+      .sid {
+	  font-style: italic;
+	  color: gray;
+	  font-size: small;
+      }
+      .text {
+	  display: block;
+	  font-size: xx-large;
+      }
+    </style>
+  </head>
+  <body>
+    <details>
+      <summary>Select constructions</summary>
+      <form action="/" method="post">
+	<ul>
+	  {% for feat, val in feats.items() %}
+	  <li>
+	    <label for="{{feat}}">{{val.1}}</label>
+	    <input type="checkbox"
+		   id="{{feat}}"
+		   name="{{feat}}"
+		   {% if val.0 %}checked{% endif %}></input>
+	    {% endfor %}
+	</ul>
+	<button type="submit">Search</button>
+      </form>
+    </details>
+    <div id="sentences">
+      {% for sent in sents %}
+      <div class="sentence">
+	<span class="sid">{{sent.0}}</span>
+	<span class="text">{{sent.1}}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </body>
+</html>
