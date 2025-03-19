@@ -31,5 +31,10 @@ def main_page():
     qs = ', '.join(['?']*len(ids))
     cur.execute(f'SELECT key, content FROM sentences WHERE key IN ({qs})',
                 ids)
-    return render_template('index.html', feats=feats, sents=cur.fetchall())
+    sents = cur.fetchall()
+    order = request.form.get('sort-order')
+    if order == 'len':
+        sents.sort(key=lambda x: len(x[1]))
+    return render_template('index.html', feats=feats, sents=sents,
+                           order=order)
  

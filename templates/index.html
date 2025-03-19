@@ -33,6 +33,14 @@
 		   {% if val.0 %}checked{% endif %}></input>
 	    {% endfor %}
 	</ul>
+	<select name="sort-order">
+	  <option value="text"
+		  {% if order == 'text' %}selected{% endif %}>
+	    Text order</option>
+	  <option value="len"
+		  {% if order == 'len' %}selected{% endif %}>
+	    Length</option>
+	</select>
 	<button type="submit">Search</button>
       </form>
     </details>
