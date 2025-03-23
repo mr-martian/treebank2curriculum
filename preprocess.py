@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import collections
 import json
 import os
 import sqlite3
@@ -24,28 +25,40 @@ cur = con.cursor()
 
 con.executescript('''
 CREATE TABLE features(key TEXT, name TEXT);
-CREATE TABLE sentences(key TEXT, content TEXT);
+CREATE TABLE sentences(key TEXT, content TEXT, freq INTEGER);
 CREATE TABLE sentence_features(feature TEXT, sentence TEXT);
 ''')
 
 run_args = ['grew', 'grep']
 
+freq = collections.Counter()
+sents = []
 for fname in args.trees:
     run_args += ['-i', fname]
     with open(fname) as fin:
         for block in fin.read().split('\n\n'):
             sid = None
             text = None
+            lemmas = set()
             for line in block.splitlines():
                 if line.startswith('# sent_id = '):
                     sid = line.split('=', 1)[1].strip()
                 elif line.startswith('# text = '):
                     text = line.split('=', 1)[1].strip()
+                elif '\t' in line and 'PUNCT' not in line:
+                    lm = line.split('\t')[2]
+                    if lm != '_':
+                        lemmas.add(lm)
+                        freq[lm] += 1
             if sid and text:
-                cur.execute(
-                    'INSERT INTO sentences(key, content) VALUES(?, ?)',
-                    [sid, text],
-                )
+                sents.append((sid, text, lemmas))
+
+rank = {lemma: rank for rank, (lemma, freq) in enumerate(freq.most_common())}
+for sid, text, lemmas in sents:
+    cur.execute(
+        'INSERT INTO sentences(key, content, freq) VALUES(?, ?, ?)',
+        [sid, text, max([rank[lm] for lm in lemmas])],
+    )
 
 con.commit()
 

@@ -3,19 +3,19 @@
   <head>
     <style>
       #sentences {
-	  overflow-y: scroll;
+	        overflow-y: scroll;
       }
       .sentence {
-	  margin: 10px;
+	        margin: 10px;
       }
       .sid {
-	  font-style: italic;
-	  color: gray;
-	  font-size: small;
+	        font-style: italic;
+	        color: gray;
+	        font-size: small;
       }
       .text {
-	  display: block;
-	  font-size: xx-large;
+	        display: block;
+	        font-size: xx-large;
       }
     </style>
   </head>
@@ -23,32 +23,35 @@
     <details>
       <summary>Select constructions</summary>
       <form action="/" method="post">
-	<ul>
-	  {% for feat, val in feats.items() %}
-	  <li>
-	    <label for="{{feat}}">{{val.1}}</label>
-	    <input type="checkbox"
-		   id="{{feat}}"
-		   name="{{feat}}"
-		   {% if val.0 %}checked{% endif %}></input>
-	    {% endfor %}
-	</ul>
-	<select name="sort-order">
-	  <option value="text"
-		  {% if order == 'text' %}selected{% endif %}>
-	    Text order</option>
-	  <option value="len"
-		  {% if order == 'len' %}selected{% endif %}>
-	    Length</option>
-	</select>
-	<button type="submit">Search</button>
+	      <ul>
+	        {% for feat, val in feats.items() %}
+	        <li>
+	          <label for="{{feat}}">{{val.1}}</label>
+	          <input type="checkbox"
+		               id="{{feat}}"
+		               name="{{feat}}"
+		               {% if val.0 %}checked{% endif %}></input>
+	          {% endfor %}
+	      </ul>
+	      <select name="sort-order">
+	        <option value="text"
+		              {% if order == 'text' %}selected{% endif %}>
+	          Text order</option>
+	        <option value="len"
+		              {% if order == 'len' %}selected{% endif %}>
+	          Length</option>
+	      </select>
+        <label for="freq">Include top</label>
+        <input id="freq" name="freq" type="number" value="{{freq}}"></input>
+        <label for="freq">lemmas</label>
+	      <button type="submit">Search</button>
       </form>
     </details>
     <div id="sentences">
       {% for sent in sents %}
       <div class="sentence">
-	<span class="sid">{{sent.0}}</span>
-	<span class="text">{{sent.1}}</span>
+	      <span class="sid">{{sent.0}}</span>
+	      <span class="text">{{sent.1}}</span>
       </div>
       {% endfor %}
     </div>

@@ -12,6 +12,11 @@ app = Flask('treebank2curriculum',
 
 @app.route('/', methods=['get', 'post'])
 def main_page():
+    freq = 500
+    try:
+        freq = int(request.form.get('freq', '500'))
+    except:
+        pass
     db_path = os.environ['T2C_DB']
     con = sqlite3.connect(db_path)
     cur = con.cursor()
@@ -22,19 +27,19 @@ def main_page():
     pos = [f for f in feats if feats[f][0]]
     neg = [f for f in feats if not feats[f][0]]
     if not pos:
-        return render_template('index.html', feats=feats, sents=[])
+        return render_template('index.html', feats=feats, sents=[],
+                               freq=freq)
     sel = 'SELECT sentence FROM sentence_features WHERE feature = ?'
     query = ' UNION '.join([sel] * len(pos))
     query += ''.join([' EXCEPT '+sel] * len(neg))
     cur.execute(query, pos+neg)
     ids = [x[0] for x in cur.fetchall()]
     qs = ', '.join(['?']*len(ids))
-    cur.execute(f'SELECT key, content FROM sentences WHERE key IN ({qs})',
-                ids)
+    cur.execute(f'SELECT key, content FROM sentences WHERE key IN ({qs}) AND freq < ?',
+                ids + [freq])
     sents = cur.fetchall()
     order = request.form.get('sort-order')
     if order == 'len':
         sents.sort(key=lambda x: len(x[1]))
     return render_template('index.html', feats=feats, sents=sents,
-                           order=order)
- 
+                           order=order, freq=freq)
