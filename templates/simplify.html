@@ -1,0 +1,47 @@
+ <!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #sentences {
+	        overflow-y: scroll;
+      }
+      .sentence {
+	        margin: 10px;
+      }
+      .sent_id {
+	        font-style: italic;
+	        color: gray;
+	        font-size: small;
+      }
+      .text {
+	        display: block;
+	        font-size: xx-large;
+      }
+    </style>
+  </head>
+  <body>
+    <form method="get">
+      <select name="book">
+	<option value="Genesis"
+		{% if book == 'Genesis' %}selected{% endif %}>
+	  Genesis</option>
+	<option value="Exodus"
+		{% if book == 'Exodus' %}selected{% endif %}>
+	  Exodus</option>
+	<option value="Ruth"
+		{% if book == 'Ruth' %}selected{% endif %}>
+	  Ruth</option>
+      </select>
+      <input type="number" name="chapter" value="{{chapter}}"></input>
+      <br/>
+      <label for="level">Simplification level</label>
+      <input type="number" name="level" id="level" value="{{level}}">
+	</input>
+	</br>
+	<button type="submit">Search</button>
+    </form>
+    <div id="sentences">
+      {{results|safe}}
+    </div>
+  </body>
+</html>

@@ -3,6 +3,7 @@
 from flask import Flask, request, render_template
 import os
 import sqlite3
+import subprocess
 
 base_dir = os.path.dirname(__file__)
 app = Flask('treebank2curriculum',
@@ -43,3 +44,16 @@ def main_page():
         sents.sort(key=lambda x: len(x[1]))
     return render_template('index.html', feats=feats, sents=sents,
                            order=order, freq=freq)
+
+@app.route('/simplify')
+def simplify():
+    book = request.args.get('book', 'Genesis')
+    chapter = int(request.args.get('chapter', '1'))
+    level = int(request.args.get('level', '1'))
+    proc = subprocess.run(['bash', 'simplify.sh', book, str(chapter),
+                           str(level)],
+                          encoding='utf-8', capture_output=True)
+    print(proc.stdout)
+    print(proc.stderr)
+    return render_template('simplify.html', book=book, chapter=chapter,
+                           level=level, results=proc.stdout)
