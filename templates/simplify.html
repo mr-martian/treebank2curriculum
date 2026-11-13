@@ -22,15 +22,24 @@
   <body>
     <form method="get">
       <select name="book">
-	<option value="Genesis"
-		{% if book == 'Genesis' %}selected{% endif %}>
-	  Genesis</option>
-	<option value="Exodus"
-		{% if book == 'Exodus' %}selected{% endif %}>
-	  Exodus</option>
-	<option value="Ruth"
-		{% if book == 'Ruth' %}selected{% endif %}>
-	  Ruth</option>
+	      <option value="Genesis"
+		            {% if book == 'Genesis' %}selected{% endif %}>
+	        Genesis</option>
+	      <option value="Exodus"
+		            {% if book == 'Exodus' %}selected{% endif %}>
+	        Exodus</option>
+	      <option value="Leviticus"
+		            {% if book == 'Leviticus' %}selected{% endif %}>
+	        Leviticus</option>
+	      <option value="Numbers"
+		            {% if book == 'Numbers' %}selected{% endif %}>
+	        Numbers</option>
+	      <option value="Deuteronomy"
+		            {% if book == 'Deuteronomy' %}selected{% endif %}>
+	        Deuteronomy</option>
+	      <option value="Ruth"
+		            {% if book == 'Ruth' %}selected{% endif %}>
+	        Ruth</option>
       </select>
       <input type="number" name="chapter" value="{{chapter}}"></input>
       <br/>
